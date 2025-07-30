@@ -48,13 +48,13 @@
 </script>
 
 <div class="notifications">
-    {#each notifications as {title, message, severity, animationKey} (animationKey)}
+    {#each notifications as {title, message, animationKey} (animationKey)}
         <div
                 animate:flip={{ duration: 200 }}
                 in:fly={{ x: 30, duration: 200 }}
                 out:fly={{ x: 30, duration: 200 }}
         >
-            <Notification {title} {message} {severity}/>
+            <Notification {title} {message}/>
         </div>
     {/each}
 </div>

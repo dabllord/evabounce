@@ -7,6 +7,7 @@
     import HealthProgress from "./HealthProgress.svelte";
     import type {TargetChangeEvent} from "../../../../integration/events";
     import { getPlayerData } from "../../../../integration/rest";
+    import AbsorptionProgress from "./AbsorptionProgress.svelte";
 
     let target: PlayerData | null = null;
     let visible = true;
@@ -44,12 +45,6 @@
 
 {#if visible && target != null}
     <div class="armor-stats">
-        {#if target.mainHandStack}
-            <ArmorStatus itemStack={target.mainHandStack} />
-        {/if}
-        {#if target.offHandStack}
-            <ArmorStatus itemStack={target.offHandStack} />
-        {/if}
         {#if target.armorItems[3].count > 0}
             <ArmorStatus itemStack={target.armorItems[3]} />
         {/if}
@@ -64,17 +59,24 @@
         {/if}
     </div>
     <div class="targethud" transition:fly={{ y: -10, duration: 200 }}>
-        <div class="avatar">
-            <img src="{REST_BASE}/api/v1/client/resource/skin?uuid={target.uuid}" alt="img/steve.png" />
-        </div>
-        <div class="metadata-container">
-            <span class="name">{target.username}</span>
-            <div class="data">
-                <span class="txt-data">Health: {target.health + target.absorption} | {state}</span>
-                <HealthProgress maxHealth={target.maxHealth + target.absorption} health={target.health}></HealthProgress>
+        <div class="metadata">
+            <div class="avatar">
+                <img src="{REST_BASE}/api/v1/client/resource/skin?uuid={target.uuid}" alt="img/steve.png" />
+            </div>
+            <div class="metadata-container">
+                <span class="name">{target.username}</span>
+                <div class="data">
+                    <span class="txt-data">Health: {Math.round(target.health)}, Absorption: {Math.round(target.absorption)}, {state}</span>
+                </div>
             </div>
         </div>
+
+        <div class="health-container">
+            <HealthProgress maxHealth={target.maxHealth} health={target.health}></HealthProgress>
+            <AbsorptionProgress maxHealth={target.maxHealth} health={target.absorption}></AbsorptionProgress>
+        </div>
     </div>
+
 {/if}
 
 <style lang="scss">
@@ -84,21 +86,36 @@
 
     }
     .targethud {
-        background-color: rgba(34, 34, 34, 0.705);
-        border-radius: 5px;
+        background-color: rgba(34, 34, 34, 1);
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        width: 250px;
+        height: 40px;
+        gap: 3px;
+        font-family: "Montserrat";
+        font-size: 12px;
+    }
+
+    .metadata {
+        padding: 5px;
         display: flex;
         flex-direction: row;
-        padding: 5px;
-        width: 200px;
-        height: 60px;
         gap: 10px;
-        font-family: "Montserrat";
-        font-size: 16px;
     }
 
     .data {
         font-family: "Montserrat";
-        width: 125px;
+    }
+
+    .health-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        width: 250px;
+        border-radius: 3px;
+        background-color: rgba(23, 23, 23, 1);
+        padding: 3px;
     }
 
     .txt-data {
@@ -113,12 +130,16 @@
 
         .name {
             color: white;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
     .avatar {
-        width: 50px;
-        height: 50px;
+        width: 30px;
+        height: 30px;
         position: relative;
         image-rendering: pixelated;
         background-image: url("/img/steve.png");
@@ -129,7 +150,7 @@
 
         img {
             position: absolute;
-            scale: 6.25;
+            scale: 5;
             left: 118px;
             top: 118px;
         }

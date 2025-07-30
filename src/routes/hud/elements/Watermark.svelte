@@ -91,7 +91,8 @@
         padding: 1px 5px;
         background-color: #FEFEFE;
         border-radius: 5px;
-        font-family: "Pixel"
+        font-family: "Pixel";
+        font-size: 25px;
     }
 
     .background::before {

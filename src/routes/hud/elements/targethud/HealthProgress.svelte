@@ -14,13 +14,15 @@
     @use "../../../../colors.scss" as *;
 
     .health-progress {
-        position: relative;
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
     }
 
     .thumb {
         border-radius: 2px;
         height: 8px;
-        background-color: rgb(167, 167, 167);
+        background-color: rgb(61, 161, 207);
         transition: ease width 0.5s;
+        z-index: 1;
     }
 </style>

@@ -26,22 +26,4 @@
         width: 16px;
         image-rendering: pixelated;
     }
-
-    .durability {
-        display: flex;
-        flex-direction: column;
-        row-gap: 1px;
-
-        .point {
-            background-color: rgba($targethud-base-color, 0.3);
-            height: 3px;
-            width: 5px;
-            border-radius: 1px;
-            transition: ease background-color 0.7s;
-
-            &.active {
-                background-color: $accent-color;
-            }
-        }
-    }
 </style>
